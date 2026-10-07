@@ -1,0 +1,76 @@
+{
+  "name": "ollama-balance",
+  "displayName": "Ollama Balance",
+  "description": "Shows how many ollama.com cloud credits are left, in the status bar.",
+  "version": "1.1.0",
+  "publisher": "p3s",
+  "license": "MIT",
+  "categories": [
+    "Other"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/p3s/vscode-extension-ollama-balance"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ollamaBalance.updateNow",
+        "title": "Ollama Balance: Update Now"
+      },
+      {
+        "command": "ollamaBalance.setApiKey",
+        "title": "Ollama Balance: Set API Key…"
+      },
+      {
+        "command": "ollamaBalance.showDetails",
+        "title": "Ollama Balance: Show Details"
+      },
+      {
+        "command": "ollamaBalance.openSettings",
+        "title": "Ollama Balance: Open Settings"
+      },
+      {
+        "command": "ollamaBalance.copyRawResponse",
+        "title": "Ollama Balance: Copy Raw Response"
+      }
+    ],
+    "configuration": {
+      "title": "Ollama Balance",
+      "properties": {
+        "ollamaBalance.pollInterval": {
+          "type": "integer",
+          "default": 120,
+          "minimum": 30,
+          "maximum": 1800,
+          "markdownDescription": "How often to poll `ollama.com/api/balance` for the remaining credits and `ollama.com/api/usage` for spend statistics, in seconds. Failures back off x2 up to x8 of this interval; a `429` is obeyed through its `Retry-After` header."
+        },
+        "ollamaBalance.apiKey": {
+          "type": "string",
+          "deprecationMessage": "Not used for API calls and ignored. Keys are stored in the system keychain — run 'Ollama Balance: Set API Key…' instead. If a value is present here, the extension offers to move it over.",
+          "markdownDescription": "Deprecated. Kept only so the extension can detect a plain-text key you already put into settings.json and offer to migrate it to secure storage."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node esbuild.test.mjs && node --test dist-test/*.cjs",
+    "package": "npx @vscode/vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.0"
+  }
+}
