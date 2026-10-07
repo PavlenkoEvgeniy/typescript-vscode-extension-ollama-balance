@@ -1,0 +1,64 @@
+name: Release VSIX
+
+# Publishing a release is the trigger, so the release exists by the time we
+# attach the file to it. The build runs against the release's tag.
+on:
+  release:
+    types: [published]
+
+# `gh release upload` writes to the release, and the default token is read-only
+# in repositories that keep the default workflow permissions.
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: npm
+
+      # Fails fast, before the toolchain is installed: a release tag cannot be
+      # moved, so a mismatch has to be caught before the file is built with a
+      # name that disagrees with the release.
+      - name: Check that the release tag matches package.json
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          want="${TAG#v}"
+          got="$(node -p "require('./package.json').version")"
+          if [ "$want" != "$got" ]; then
+            echo "::error::Release tag ${TAG} does not match the version in package.json (${got}). Bump the version, commit, and tag again — an existing tag cannot be repointed."
+            exit 1
+          fi
+          echo "VERSION=${want}" >> "$GITHUB_ENV"
+          echo "VSIX=ollama-balance-${want}.vsix" >> "$GITHUB_ENV"
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      # `dist/` is git-ignored and is what the extension host loads, so it has to
+      # be built before packaging.
+      - run: npm run compile
+
+      - name: Package the extension
+        run: npm run package -- --out "$VSIX"
+
+      - name: Upload the VSIX as a workflow artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.VSIX }}
+          path: ${{ env.VSIX }}
+          if-no-files-found: error
+
+      # `--clobber` keeps a re-run of this workflow idempotent.
+      - name: Attach the VSIX to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" "$VSIX" --clobber

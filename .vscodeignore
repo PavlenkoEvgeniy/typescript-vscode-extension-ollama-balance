@@ -1,6 +1,7 @@
 # Everything the extension host does not need at runtime. `dist/` is bundled by
 # esbuild, so the sources and the test bundle stay out of the package.
 .vscode/**
+.github/**
 .gitignore
 .vscodeignore
 src/**
