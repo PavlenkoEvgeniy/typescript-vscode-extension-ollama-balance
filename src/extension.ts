@@ -1,7 +1,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import { money, percent, windowLabel } from './format';
+import { moment, money, percent, windowLabel } from './format';
 import { RawResponse, RequestError } from './http';
 import { fetchQuota, primaryWindow, remainingUsd, usedFraction } from './quota';
 import { fetchSpend } from './spend';
@@ -189,7 +189,7 @@ export function activate(context: vscode.ExtensionContext): void {
       }
       items.push({
         label: '$(clock) Updated',
-        detail: lastUpdated?.toLocaleString() ?? 'unknown',
+        detail: lastUpdated ? moment(lastUpdated) : 'unknown',
       });
     } else {
       items.push({ label: '$(warning) No data', detail: 'Run "Update now" once the API key is set.' });

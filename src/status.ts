@@ -1,7 +1,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import { money, percent, windowLabel } from './format';
+import { moment, money, percent, windowLabel } from './format';
 import { RequestError, RequestErrorKind } from './http';
 import { QuotaSnapshot, primaryWindow, remainingUsd, usedFraction } from './quota';
 import { Spend } from './spend';
@@ -121,7 +121,7 @@ function appendQuota(md: vscode.MarkdownString, snapshot: Snapshot): void {
       md.appendMarkdown(`- Plan used: ${percent(used)}\n`);
     }
     if (quota.periodEnd) {
-      md.appendMarkdown(`- Resets: ${quota.periodEnd.toLocaleString()}\n`);
+      md.appendMarkdown(`- Resets: ${moment(quota.periodEnd)}\n`);
     }
     return;
   }
@@ -138,7 +138,7 @@ function appendQuota(md: vscode.MarkdownString, snapshot: Snapshot): void {
     );
   }
   if (primary.resetsAt) {
-    md.appendMarkdown(`- ${windowLabel(primary.name)} resets: ${primary.resetsAt.toLocaleString()}\n`);
+    md.appendMarkdown(`- ${windowLabel(primary.name)} resets: ${moment(primary.resetsAt)}\n`);
   }
 }
 
@@ -150,7 +150,7 @@ function appendSpend(md: vscode.MarkdownString, snapshot: Snapshot): void {
 
 function appendUpdated(md: vscode.MarkdownString, label: string, updated: Date | undefined): void {
   if (updated) {
-    md.appendMarkdown(`\n\n${label} ${updated.toLocaleTimeString()}\n`);
+    md.appendMarkdown(`\n\n${label} ${moment(updated)}\n`);
   }
 }
 
