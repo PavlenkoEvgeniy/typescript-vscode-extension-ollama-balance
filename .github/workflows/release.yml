@@ -18,9 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # vsce 4.0.0 declares `engines.node: >= 22`. Packaging on 20 did work, but
+      # the declared floor is the version the tool is tested against.
       - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '22'
           cache: npm
 
       # Fails fast, before the toolchain is installed: a release tag cannot be

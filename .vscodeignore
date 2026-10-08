@@ -14,3 +14,6 @@ package-lock.json
 # The icon source. `images/icon.png` is what the manifest names and what the
 # Extensions list draws; vsce refuses an SVG in the `icon` field outright.
 images/**/*.svg
+# The publishing runbook is addressed to whoever maintains the extension, not
+# to whoever installs it. `docs/adr/` is deliberately left in, as it always was.
+docs/publishing.md

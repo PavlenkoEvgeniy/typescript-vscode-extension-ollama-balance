@@ -27,14 +27,24 @@ Hovering shows a tooltip with the breakdown — included and purchased credits, 
 
 ## Install
 
-There is no package registry involved: the release workflow builds a `.vsix` and attaches it to the GitHub release.
+From the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PavlenkoEvgeny.ollama-balance) — this is the path that updates itself:
+
+```sh
+code --install-extension PavlenkoEvgeny.ollama-balance
+```
+
+Or search for **Ollama Balance** in the Extensions view.
+
+If you would rather pin a specific version, every release also attaches its `.vsix` to the GitHub release:
 
 1. Download the `.vsix` for the version you want from the release assets.
 2. Install it:
 
    ```sh
-   code --install-extension ollama-balance-1.1.0.vsix
+   code --install-extension ollama-balance-<version>.vsix
    ```
+
+   A `.vsix` install does not update itself, so come back and install the newer file when you want the newer version.
 
 ## Setup
 
@@ -100,7 +110,7 @@ npm run typecheck
 npm test                   # node:test, bundled with the esbuild already present
 npm run compile            # writes dist/extension.js
 npm run package            # produces ollama-balance-<version>.vsix
-code --install-extension ollama-balance-1.1.0.vsix
+code --install-extension ollama-balance-<version>.vsix
 ```
 
 `npm run watch` rebuilds `dist/extension.js` on change.
@@ -112,10 +122,12 @@ The release workflow (`.github/workflows/release.yml`) runs when a GitHub releas
 So the order matters:
 
 1. Bump `version` in `package.json` and commit it to `main`.
-2. Create a GitHub release whose tag is `v<version>` — for `1.1.0`, the tag is `v1.1.0` — pointing at that commit.
+2. Create a GitHub release whose tag is `v<version>` — for version `X.Y.Z`, the tag is `vX.Y.Z` — pointing at that commit.
 3. Publish the release. The workflow builds and attaches `ollama-balance-<version>.vsix`.
 
 A tag cannot be repointed, so if the workflow fails with a version mismatch, the fix is a new commit and a **new** tag, never a moved one. Re-running the workflow from the release page is safe: the upload uses `--clobber`.
+
+Publishing to the Marketplace is **not** part of that workflow — it is a separate, manual step. [docs/publishing.md](docs/publishing.md) has the procedure, and says which replacement for it currently works and which does not. That procedure rests on an Azure DevOps personal access token, which stops working for Marketplace publishing on **1 December 2026**; [ADR 0005](docs/adr/0005-публикация-в-marketplace.md) records why the replacement is not yet chosen.
 
 ## License
 
