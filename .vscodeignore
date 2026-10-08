@@ -11,3 +11,6 @@ esbuild.test.mjs
 tsconfig.json
 package-lock.json
 *.vsix
+# The icon source. `images/icon.png` is what the manifest names and what the
+# Extensions list draws; vsce refuses an SVG in the `icon` field outright.
+images/**/*.svg

@@ -2,7 +2,7 @@
 
 A VS Code status-bar item that shows how many ollama.com cloud credits you have left — `☁ Ollama $97.50`.
 
-The reading comes from ollama.com's documented `GET https://ollama.com/api/balance` endpoint, parsed defensively (see [docs/adr/0004](docs/adr/0004-документированный-api-balance.md)). The extension does not compute or accumulate a balance of its own: whatever the endpoint reports is what you see.
+The reading comes from ollama.com's documented `GET https://ollama.com/api/balance` endpoint, parsed defensively (see [docs/adr/0004](docs/adr/0004-документированный-api-balance.md)). The extension does not compute or accumulate a balance of its own: whatever the endpoint reports is what you see. Ollama Balance is an unofficial extension — it is not affiliated with, endorsed by, or supported by Ollama.
 
 ## What it shows
 

@@ -2,9 +2,10 @@
   "name": "ollama-balance",
   "displayName": "Ollama Balance",
   "description": "Shows how many ollama.com cloud credits are left, in the status bar.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "publisher": "p3s",
   "license": "MIT",
+  "icon": "images/icon.png",
   "categories": [
     "Other"
   ],
